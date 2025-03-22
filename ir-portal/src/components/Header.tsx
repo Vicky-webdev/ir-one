@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   searchQuery: string;
@@ -16,10 +17,20 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, setSearchQuery }) => {
             <h1 className="text-2xl font-bold text-gray-900">LuxuryEstates</h1>
             <nav className="hidden md:flex space-x-6">
               {['Buy', 'Rent', 'Sell', 'Mortgage'].map((item) => (
-                <button key={item} className="!rounded-button text-gray-600 hover:text-gray-900 whitespace-nowrap">
+                <button
+                  key={item}
+                  className="!rounded-button text-gray-600 hover:text-gray-900 whitespace-nowrap"
+                >
                   {item}
                 </button>
               ))}
+              {/* 👇 Add Property link as a nav item */}
+              <Link
+                to="/add-property"
+                className="!rounded-button text-gray-600 hover:text-blue-600 whitespace-nowrap font-medium"
+              >
+                Add Property
+              </Link>
             </nav>
           </div>
 

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Header from "./components/Header";
 import CityCategories from "./components/CityCategories";
 import HeroBanner from "./components/HeroBanner";
@@ -6,6 +8,8 @@ import RecommendedProjects from "./components/RecommendedProjects";
 import PropertyGrid from "./components/PropertyGrid";
 import PriceTrendFooter from "./components/PriceTrendFooter";
 import PopularBuilders from "./components/PopularBuilders";
+import BhkChoices from "./components/BhkChoices";
+import PostedBy from "./components/PostedBy";
 import UpcomingProjects from "./components/UpcomingProjects";
 import LatestArticles from "./components/LatestArticles";
 
@@ -171,6 +175,8 @@ const App: React.FC = () => {
           toggleFavorite={toggleFavorite}
         />
         <PopularBuilders />
+        <BhkChoices />
+        <PostedBy />
         <UpcomingProjects />
         <LatestArticles />
 
