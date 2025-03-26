@@ -1,11 +1,14 @@
 // pages/PropertyForm.tsx
 import React, { useState } from "react";
+import Header from "../components/Header";
 import StepBasicDetails from "../components/steps/StepBasicDetails";
 import StepLocation from "../components/steps/StepLocation";
 import StepMediaAmenities from "../components/steps/StepMediaAmenities";
 import StepContact from "../components/steps/StepContact";
 import SuccessModal from "../components/SuccessModal";
 import { PropertyFormData } from "../types";
+import Layout from '../components/Layout';
+
 
 const PropertyForm: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -87,9 +90,14 @@ const PropertyForm: React.FC = () => {
       console.error("Submit Error:", error);
     }
   };
+  const [searchQuery, setSearchQuery] = useState("");
+
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    
+    <Layout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
+
+
       <div className="max-w-5xl mx-auto py-8 px-4">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
@@ -221,7 +229,9 @@ const PropertyForm: React.FC = () => {
         });
         setCurrentStep(1);
       }} />
-    </div>
+
+</Layout>
+
   );
 };
 

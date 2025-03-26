@@ -1,14 +1,18 @@
-import React from 'react';
+import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faUserCircle } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { NAV_LINKS } from '../constants/navigation';
+import { useSearch } from '../context/SearchContext';
 
 interface HeaderProps {
   searchQuery: string;
-  setSearchQuery: (val: string) => void;
+  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Header: React.FC<HeaderProps> = ({ searchQuery, setSearchQuery }) => {
+ 
+  const Header: React.FC<HeaderProps> = ({ searchQuery, setSearchQuery }) => {
+
   return (
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-4">
@@ -16,15 +20,15 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, setSearchQuery }) => {
           <div className="flex items-center space-x-8">
             <h1 className="text-2xl font-bold text-gray-900">LuxuryEstates</h1>
             <nav className="hidden md:flex space-x-6">
-              {['Buy', 'Rent', 'Sell', 'Mortgage'].map((item) => (
-                <button
+              {NAV_LINKS.map((item) => (
+                <Link
                   key={item}
+                  to={`/${item.toLowerCase()}`}
                   className="!rounded-button text-gray-600 hover:text-gray-900 whitespace-nowrap"
                 >
                   {item}
-                </button>
+                </Link>
               ))}
-              {/* 👇 Add Property link as a nav item */}
               <Link
                 to="/add-property"
                 className="!rounded-button text-gray-600 hover:text-blue-600 whitespace-nowrap font-medium"

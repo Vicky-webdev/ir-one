@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
+// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from "./components/Header";
 import CityCategories from "./components/CityCategories";
 import HeroBanner from "./components/HeroBanner";
@@ -12,7 +11,6 @@ import BhkChoices from "./components/BhkChoices";
 import PostedBy from "./components/PostedBy";
 import UpcomingProjects from "./components/UpcomingProjects";
 import LatestArticles from "./components/LatestArticles";
-
 import Footer from "./components/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,6 +27,7 @@ const App: React.FC = () => {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 5000000]);
   const [showFilters, setShowFilters] = useState(false);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+ 
   const [searchQuery, setSearchQuery] = useState("");
 
   const properties = [
@@ -84,7 +83,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* View Toggle & Filter Button */}
