@@ -1,28 +1,23 @@
-    // types.ts
-export interface PropertyFormData {
-    basicDetails: {
-      type: string;
-      listingType: string;
-      price: string;
-      area: string;
-      bedrooms: string;
-      furnishing: string;
-      availability: string;
-    };
-    location: {
-      address: string;
-      city: string;
-      state: string;
-      pinCode: string;
-      landmark: string;
-    };
-    media: File[];
-    amenities: string[];
-    description: string;
-    contact: {
-      name: string;
-      email: string;
-      mobile: string;
-    };
-  }
-  
+// types.ts
+
+export interface Property {
+  id: string;
+  title: string;
+  price: number;
+  location: string;
+  beds: number;
+  baths: number;
+  sqft: number;
+  image: string;
+  favorite?: boolean; // <-- optional favorite flag
+}
+
+export interface Filters {
+  priceMin?: number;
+  priceMax?: number;
+  sqftMin?: number;
+  sqftMax?: number;
+  location?: string;
+  showFavorites?: boolean;
+  sortBy?: 'priceLowHigh' | 'priceHighLow' | 'sizeLowHigh' | 'titleAZ' | 'titleZA' | 'default';
+}

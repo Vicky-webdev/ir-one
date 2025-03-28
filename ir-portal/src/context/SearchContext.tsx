@@ -1,25 +1,30 @@
-// ----------------------------------
-import React, { createContext, useState, useContext } from 'react';
+// SearchContext.tsx
 
-interface SearchContextProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
+import React, { createContext, useState } from 'react';
+import { Filters } from '../types';
+
+interface SearchContextType {
+  filters: Filters;
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  resetFilters: () => void;
 }
 
-const SearchContext = createContext<SearchContextProps | undefined>(undefined);
+export const SearchContext = createContext<SearchContextType>({
+  filters: {},
+  setFilters: () => {},
+  resetFilters: () => {},
+});
 
 export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState<Filters>({});
+
+  const resetFilters = () => {
+    setFilters({});
+  };
 
   return (
-    <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
+    <SearchContext.Provider value={{ filters, setFilters, resetFilters }}>
       {children}
     </SearchContext.Provider>
   );
-};
-
-export const useSearch = (): SearchContextProps => {
-  const context = useContext(SearchContext);
-  if (!context) throw new Error("useSearch must be used within SearchProvider");
-  return context;
 };

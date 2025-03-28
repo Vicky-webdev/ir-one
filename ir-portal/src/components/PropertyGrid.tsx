@@ -22,7 +22,16 @@ interface Property {
 
 interface GridProps {
   properties: Property[];
+  selectedView: 'grid' | 'list' | 'map';
+  setSelectedView: React.Dispatch<React.SetStateAction<'grid' | 'list' | 'map'>>;
+  priceRange: [number, number];
+  setPriceRange: React.Dispatch<React.SetStateAction<[number, number]>>;
+  sizeRange: [number, number];
+  setSizeRange: React.Dispatch<React.SetStateAction<[number, number]>>;
+  location: string;
+  setLocation: React.Dispatch<React.SetStateAction<string>>;
   favorites: Set<string>;
+  setFavorites: React.Dispatch<React.SetStateAction<Set<string>>>;
   toggleFavorite: (id: string) => void;
 }
 

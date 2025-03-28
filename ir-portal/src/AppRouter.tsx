@@ -1,18 +1,6 @@
 import React, { Suspense, useEffect, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
-
-
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { SearchProvider } from './context/SearchContext';
-
-
-const Loading = () => (
-  <div className="text-center py-10 text-gray-600 text-sm animate-pulse">
-    Loading page...
-  </div>
-);
-
-
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -23,8 +11,8 @@ const ScrollToTop = () => {
   return null;
 };
 
-
-const Home = lazy(() => import('./App'));
+// Lazy load actual **page components**
+const Home = lazy(() => import('./pages/Home'));
 const Buy = lazy(() => import('./pages/Buy'));
 const Rent = lazy(() => import('./pages/Rent'));
 const Sell = lazy(() => import('./pages/Sell'));
@@ -35,7 +23,7 @@ const AppRouter: React.FC = () => {
   return (
     <SearchProvider>
       <Router>
-      <ScrollToTop />
+        <ScrollToTop />
         <Suspense fallback={<div className="text-center py-10">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
