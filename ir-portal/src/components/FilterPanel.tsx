@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  
   Typography,
   Slider,
   FormControl,
@@ -12,7 +11,6 @@ import {
   IconButton,
 } from "@mui/material";
 import Grid from '@mui/material/Grid';
-
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 interface FilterPanelProps {
@@ -22,8 +20,6 @@ interface FilterPanelProps {
   setSizeRange: React.Dispatch<React.SetStateAction<[number, number]>>;
   location: string;
   setLocation: React.Dispatch<React.SetStateAction<string>>;
-  favorites: Set<string>;
-  setFavorites: React.Dispatch<React.SetStateAction<Set<string>>>;
   resetFilters: () => void;
 }
 
@@ -34,8 +30,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   setSizeRange,
   location,
   setLocation,
-  favorites,
-  setFavorites,
   resetFilters,
 }) => {
   return (
@@ -49,8 +43,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       }}
     >
       <Grid container spacing={2} alignItems="center" wrap="nowrap">
-        {/* Location Filter */}
-        <Grid item>
+        <Grid >
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel>Location</InputLabel>
             <Select
@@ -62,13 +55,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               <MenuItem value="Chennai">Chennai</MenuItem>
               <MenuItem value="Coimbatore">Coimbatore</MenuItem>
               <MenuItem value="Madurai">Madurai</MenuItem>
-              {/* Add more cities as needed */}
             </Select>
           </FormControl>
         </Grid>
 
-        {/* Price Range */}
-        <Grid item>
+        <Grid >
           <Box sx={{ minWidth: 200 }}>
             <Typography variant="body2" gutterBottom>
               Price (₹)
@@ -87,8 +78,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </Box>
         </Grid>
 
-        {/* Size Range */}
-        <Grid item>
+        <Grid>
           <Box sx={{ minWidth: 200 }}>
             <Typography variant="body2" gutterBottom>
               Size (Sq.Ft)
@@ -107,8 +97,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </Box>
         </Grid>
 
-        {/* Reset Button - aligned last */}
-        <Grid item>
+        <Grid >
           <Button
             variant="text"
             size="small"

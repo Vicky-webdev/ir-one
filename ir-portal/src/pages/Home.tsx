@@ -13,8 +13,9 @@ import ViewToggle from "../components/ViewToggle";
 import PopularBuilders from "../components/PopularBuilders";
 import { properties } from "../data/properties";
 import { Property } from "../types";
+import SearchBar from "../components/homepage/SearchBar";
 
-const Home: React.FC = () => {
+const Home = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -47,6 +48,7 @@ const Home: React.FC = () => {
 
   return (
     <Layout searchQuery={searchQuery} setSearchQuery={setSearchQuery}>
+      <SearchBar />
       <HeroBanner />
       <RecommendedProjects />
       <CityCategories />

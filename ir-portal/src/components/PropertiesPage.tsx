@@ -1,4 +1,3 @@
-// PropertiesPage.tsx
 import React, { useContext, useState } from 'react';
 import { useFilteredProperties } from '../hooks/useFilteredProperties';
 import { SearchContext } from '../context/SearchContext';
@@ -12,9 +11,12 @@ const PropertiesPage: React.FC = () => {
 
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('');
-
-  // ✅ Add this: manage favorites here
   const [favorites, setFavorites] = useState<string[]>([]);
+
+  // State for FilterPanel
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
+  const [sizeRange, setSizeRange] = useState<[number, number]>([0, 10000]);
+  const [location, setLocation] = useState<string>('');
 
   const toggleFavorite = (id: string) => {
     setFavorites((prev) =>
@@ -50,7 +52,15 @@ const PropertiesPage: React.FC = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="md:col-span-1">
-          <FilterPanel onChange={(filters) => setFilters(filters)} />
+          <FilterPanel
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+            sizeRange={sizeRange}
+            setSizeRange={setSizeRange}
+            location={location}
+            setLocation={setLocation}
+            resetFilters={resetFilters}
+          />
         </div>
         <div className="md:col-span-3">
           {properties.length === 0 ? (
