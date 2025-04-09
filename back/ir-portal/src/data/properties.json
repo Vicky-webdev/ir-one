@@ -1,0 +1,27 @@
+[
+    {
+      "id": "1",
+      "title": "Luxury Villa",
+      "price": 4500000,
+      "location": "Chennai",
+      "beds": 4,
+      "baths": 3,
+      "sqft": 2200,
+      "image": "https://via.placeholder.com/400x200",
+      "lat": 13.0827,
+      "lng": 80.2707
+    },
+    {
+      "id": "2",
+      "title": "Modern Apartment",
+      "price": 2500000,
+      "location": "Coimbatore",
+      "beds": 3,
+      "baths": 2,
+      "sqft": 1400,
+      "image": "https://via.placeholder.com/400x200",
+      "lat": 11.0168,
+      "lng": 76.9558
+    }
+  ]
+  
