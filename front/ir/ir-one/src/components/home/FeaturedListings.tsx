@@ -1,12 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-// import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { FaHeart, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-// Type for property listing
 interface Listing {
   id: string;
   title: string;
@@ -15,10 +13,9 @@ interface Listing {
   type: string;
   priceRange: string;
   image: string;
-  badge?: string; // e.g., "Hot", "New Launch", "Active"
+  badge?: string;
 }
 
-// Default sample listings
 const defaultListings: Listing[] = [
   {
     id: '1',
@@ -50,78 +47,154 @@ const defaultListings: Listing[] = [
     image: 'https://newprojects.99acres.com/projects/vvr_southindia_properties_llp/vvr_omega_town_1/images/ktxrakc_1720605812_503705977_med.jpg',
     badge: 'Active'
   },
+  {
+    id: '4',
+    title: 'Sunshine Valley',
+    by: 'Sun Realty',
+    location: 'Plots in Tambaram, Chennai',
+    type: 'Land / Plot',
+    priceRange: '₹10L - ₹15L',
+    image: 'https://via.placeholder.com/300x200',
+    badge: 'Sold Out'
+  },
+  {
+    id: '5',
+    title: 'Green Nest Villas',
+    by: 'Green Builders',
+    location: 'Villas in Kelambakkam',
+    type: 'Villa',
+    priceRange: '₹80L - ₹1.1Cr',
+    image: 'https://via.placeholder.com/300x200',
+    badge: 'Limited Units'
+  }
 ];
 
-// Custom arrows for slider
-const NextArrow = (props: any) => (
-  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer text-blue-600 hover:text-blue-800" onClick={props.onClick}>
-    <FaChevronRight size={20} />
+import { CustomArrowProps } from 'react-slick';
+
+const NextArrow = ({ onClick }: CustomArrowProps) => (
+  <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-white p-2 rounded-full shadow hover:scale-110 transition" onClick={onClick}>
+    <FaChevronRight className="text-blue-600" />
   </div>
 );
 
-const PrevArrow = (props: any) => (
-  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer text-blue-600 hover:text-blue-800" onClick={props.onClick}>
-    <FaChevronLeft size={20} />
+const PrevArrow = ({ onClick }: CustomArrowProps) => (
+  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer bg-white p-2 rounded-full shadow hover:scale-110 transition" onClick={onClick}>
+    <FaChevronLeft className="text-blue-600" />
   </div>
 );
+
+const getBadgeColor = (badge: string | undefined) => {
+  switch (badge) {
+    case 'Hot':
+      return 'bg-red-500';
+    case 'New Launch':
+      return 'bg-green-500';
+    case 'Active':
+      return 'bg-blue-500';
+    case 'Sold Out':
+      return 'bg-gray-800';
+    case 'Limited Units':
+      return 'bg-yellow-500';
+    default:
+      return 'bg-gray-500';
+  }
+};
 
 const FeaturedListings: React.FC<{ listings?: Listing[] }> = ({ listings = defaultListings }) => {
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
+
+  const toggleFavorite = (id: string) => {
+    const updatedFavorites = favorites.includes(id)
+      ? favorites.filter(fav => fav !== id)
+      : [...favorites, id];
+
+    setFavorites(updatedFavorites);
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+
+    if (!favorites.includes(id)) {
+      setToast('Added to Wishlist');
+      setTimeout(() => setToast(null), 3000);
+    }
+  };
+
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
-    speed: 500,
+    speed: 600,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 4500,
     slidesToShow: 4,
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
     responsive: [
       { breakpoint: 1280, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 2 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
-    ],
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 640, settings: { slidesToShow: 1 } },
+    ]
   };
 
   return (
     <motion.section
-      className="py-12 px-4 md:px-8 lg:px-16 bg-gray-100"
+      className="py-16 px-4 md:px-10 lg:px-20 bg-gray-50 relative"
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
     >
-      <div className="max-w-7xl mx-auto text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800">Featured Listings</h2>
-        <p className="text-gray-600 mt-2">Top properties hand-picked for you</p>
+      {toast && (
+        <div className="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50">
+          {toast}
+        </div>
+      )}
+      <div className="max-w-7xl mx-auto text-center mb-10">
+        <h2 className="text-4xl font-bold text-gray-800">🏡 Featured Listings</h2>
+        <p className="text-gray-600 mt-3 text-base">Top properties hand-picked just for you</p>
       </div>
 
-      <div className="relative">
+      <div className="relative px-2">
         <Slider {...settings}>
           {listings.map((listing) => (
             <div key={listing.id} className="px-2">
-              <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 overflow-hidden relative">
+              <div className="h-full flex flex-col justify-between bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden relative">
                 {listing.badge && (
-                  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                  <span
+                    className={`absolute top-3 left-3 text-white text-xs font-semibold px-2 py-1 rounded z-10 ${getBadgeColor(listing.badge)}`}
+                  >
                     {listing.badge}
                   </span>
                 )}
 
-                <span className="absolute top-2 right-2 text-gray-600 hover:text-red-500 cursor-pointer">
-                  <FaHeart />
-                </span>
+                <button
+                  onClick={() => toggleFavorite(listing.id)}
+                  className="absolute top-3 right-3 text-lg text-gray-400 z-10 transition"
+                >
+                  <FaHeart className={favorites.includes(listing.id) ? 'text-red-500' : 'text-gray-400'} />
+                </button>
 
                 <img
                   src={listing.image}
                   alt={listing.title}
-                  className="w-full h-[152px] object-cover rounded-t-xl"
+                  className="w-full h-36 object-cover"
                 />
-
-                <div className="p-3 space-y-1">
-                  <h3 className="text-base font-bold text-black">{listing.title}</h3>
-                  <p className="text-sm text-gray-500">By {listing.by}</p>
-                  <p className="text-sm text-gray-600">{listing.location}</p>
-                  <p className="text-base font-semibold text-green-700">{listing.priceRange}</p>
+                <div className="p-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-800 mb-1">{listing.title}</h3>
+                    <p className="text-sm text-gray-500">By {listing.by}</p>
+                    <p className="text-sm text-gray-600">{listing.location}</p>
+                  </div>
+                  <div className="flex justify-between items-center pt-4">
+                    <span className="text-sm font-medium text-blue-600">{listing.type}</span>
+                    <span className="text-base font-semibold text-green-700">{listing.priceRange}</span>
+                  </div>
                 </div>
               </div>
             </div>

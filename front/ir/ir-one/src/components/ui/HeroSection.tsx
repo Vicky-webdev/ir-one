@@ -21,7 +21,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   title,
   subtitle,
   ctaButtons = [],
-  showSearchBar = false,
+  
 }) => {
   return (
     <section
@@ -57,18 +57,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         )}
 
-        {showSearchBar && (
-          <div className="mt-10 max-w-xl mx-auto bg-white rounded-full p-2 flex shadow-lg overflow-hidden">
-            <input
-              type="text"
-              placeholder="Search by location, city, or keyword..."
-              className="flex-grow px-4 py-2 rounded-l-full text-gray-700 focus:outline-none"
-            />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition">
-              Search
-            </button>
-          </div>
-        )}
+        
       </div>
     </section>
   );
