@@ -2,9 +2,13 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/index';
 import PropertiesPage from './pages/properties/index';
 import PropertyDetailsPage from './pages/properties/[id]';
-import LoginPage from './pages/login';
-import RegisterPage from './pages/register';
+
 import DashboardPage from './pages/dashboard';
+import PlotsPage from './pages/buy/plots';
+import VillasPage from './pages/buy/villa';
+import IndependentHomesPage from './pages/buy/independent-house';
+import FlatsPage from './pages/buy/flats';
+
 
 
 function App() {
@@ -13,9 +17,13 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/properties" element={<PropertiesPage />} />
       <Route path="/properties/:id" element={<PropertyDetailsPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+ 
       <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/buy/plots" element={<PlotsPage />} />
+<Route path="/buy/villas" element={<VillasPage />} />
+<Route path="/buy/independent-homes" element={<IndependentHomesPage />} />
+<Route path="/buy/flats" element={<FlatsPage />} />
+
     </Routes>
   );
 }
