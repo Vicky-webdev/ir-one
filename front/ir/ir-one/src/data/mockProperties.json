@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "2 BHK in Chennai",
+    "location": "Chennai",
+    "propertyType": "Apartment",
+    "bhk": "2 BHK",
+    "budget": 5000000,
+    "area": 900,
+    "image": "/images/property1.jpg"
+  },
+  {
+    "id": 2,
+    "title": "3 BHK Villa in Coimbatore",
+    "location": "Coimbatore",
+    "propertyType": "Villa",
+    "bhk": "3 BHK",
+    "budget": 7500000,
+    "area": 1500,
+    "image": "/images/property2.jpg"
+  }
+]

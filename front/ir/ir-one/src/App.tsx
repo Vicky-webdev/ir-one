@@ -8,6 +8,7 @@ import PlotsPage from './pages/buy/plots';
 import VillasPage from './pages/buy/villa';
 import IndependentHomesPage from './pages/buy/independent-house';
 import FlatsPage from './pages/buy/flats';
+import ResultsPage from './pages/results';
 
 
 
@@ -23,6 +24,7 @@ function App() {
 <Route path="/buy/villas" element={<VillasPage />} />
 <Route path="/buy/independent-homes" element={<IndependentHomesPage />} />
 <Route path="/buy/flats" element={<FlatsPage />} />
+<Route path="/results" element={<ResultsPage />} />
 
     </Routes>
   );

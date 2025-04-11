@@ -1,31 +1,61 @@
-// import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import HeroSection from '../components/ui/HeroSection';
-// import SearchFilterBar from '../components/home/SearchFilterBar';
-// import PropertyList from '../components/PropertyList';
-// import mockProperties from '../data/mockProperties';
-import bannerImage from '../assets/images/1.jpg';
+import SearchBar from '../components/SearchFilterBar';
 import FeaturesSection from '../components/home/FeaturesSection';
 import FeaturedListings from '../components/home/FeaturedListings';
-import SearchBar from '../components/SearchFilterBar/index';
 
-// interface Property {
-//   id: number;
-//   title: string;
-//   location: string;
-//   propertyType: string;
-//   bhk: string;
-//   budget: number;
-//   area: number;
-// }
+import bannerImage from '../assets/images/1.jpg';
+import propertyData from '../data/mockProperties.json';
+
+// Define the property type
+interface Property {
+  id: number;
+  title: string;
+  location: string;
+  propertyType: string;
+  bhk: string;
+  budget: number;
+  area: number;
+  image: string;
+}
 
 const HomePage = () => {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [filtered, setFiltered] = useState<Property[]>([]);
+  const [query, setQuery] = useState<string>('');
+  const navigate = useNavigate();
 
-  const handleSearch = (query: string) => {
-    // Navigate or filter results
-    console.log('Searching for:', query);
+  useEffect(() => {
+    const loadedProperties = propertyData as Property[];
+    setProperties(loadedProperties);
+    setFiltered(loadedProperties);
+  }, []);
+
+  const handleSearch = (filters: {
+    location: string;
+    propertyType: string;
+    bhk: string;
+    minBudget: string;
+    maxBudget: string;
+  }) => {
+    const searchParams = new URLSearchParams();
+
+    if (filters.location) searchParams.append('location', filters.location);
+    if (filters.propertyType) searchParams.append('propertyType', filters.propertyType);
+    if (filters.bhk) searchParams.append('bhk', filters.bhk);
+    if (filters.minBudget) searchParams.append('minBudget', filters.minBudget);
+    if (filters.maxBudget) searchParams.append('maxBudget', filters.maxBudget);
+
+    navigate(`/results?${searchParams.toString()}`);
   };
 
-  
+  const handleSubmitSearch = () => {
+    if (query) {
+      navigate(`/results?query=${encodeURIComponent(query)}`);
+    }
+  };
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -41,13 +71,37 @@ const HomePage = () => {
       />
 
       <div className="my-6">
-      <SearchBar onSearch={handleSearch} />
+        <SearchBar
+          query={query}
+          onSearch={handleSearch}
+          onSubmit={handleSubmitSearch}
+          suggestions={filtered.slice(0, 5)}
+        />
       </div>
 
-      {/* <PropertyList properties={filteredProperties} /> */}
+      {/* Listing preview grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+        {filtered.map((property) => (
+          <div
+            key={property.id}
+            className="border rounded-lg shadow hover:shadow-md transition p-4"
+          >
+            <img
+              src={property.image}
+              alt={property.title}
+              className="w-full h-48 object-cover rounded mb-2"
+            />
+            <h3 className="text-lg font-semibold">{property.title}</h3>
+            <p className="text-gray-600">{property.location} - {property.bhk}</p>
+            <p className="text-indigo-600 font-bold mt-1">
+              ₹ {property.budget.toLocaleString()}
+            </p>
+          </div>
+        ))}
+      </div>
 
-      <FeaturesSection/>
-      <FeaturedListings></FeaturedListings>
+      <FeaturesSection />
+      <FeaturedListings />
     </div>
   );
 };

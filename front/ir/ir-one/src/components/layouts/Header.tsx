@@ -1,10 +1,15 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
  
-import FlyoutMenu from '../navigation/FlyoutMenu';
+// import FlyoutMenu from '../navigation/FlyoutMenu';
 import { useAuthModal } from '../../context/AuthModalContext';
+import SearchBar from '../SearchFilterBar';
  
 const Header: React.FC = () => {
+  const handleSearch = (query: string) => {
+    console.log('Searching for:', query);
+    // You can later redirect like: router.push(`/search?query=${query}`);
+  };
   const [isOpen, setIsOpen] = React.useState(false);
   const modalContext = useAuthModal();
  
@@ -13,9 +18,12 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="text-2xl font-bold text-blue-700">RealtyHub</div>
+          
+
 
           <div className="hidden md:flex items-center gap-8">
-            <FlyoutMenu />
+            {/* <FlyoutMenu /> */}
+           
             <div className="flex items-center gap-4">
               <button
                 onClick={modalContext?.openLogin}
