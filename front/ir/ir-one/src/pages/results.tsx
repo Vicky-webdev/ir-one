@@ -1,5 +1,3 @@
-// src/pages/ResultsPage.tsx
-
 import { useLocation } from 'react-router-dom';
 import propertyData from '../data/mockProperties.json';
 
@@ -7,20 +5,22 @@ const ResultsPage = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
+  const query = params.get('query')?.toLowerCase() || '';
   const locationQuery = params.get('location')?.toLowerCase() || '';
   const typeQuery = params.get('propertyType')?.toLowerCase() || '';
   const bhkQuery = params.get('bhk')?.toLowerCase() || '';
   const minBudget = parseInt(params.get('minBudget') || '0');
-  const maxBudget = parseInt(params.get('maxBudget') || '0');
+  const maxBudget = parseInt(params.get('maxBudget') || '100000000');
 
   const filteredProperties = propertyData.filter((property) => {
-    const matchesLocation = property.location.toLowerCase().includes(locationQuery);
+    const matchesQuery = query ? property.title.toLowerCase().includes(query) : true;
+    const matchesLocation = locationQuery ? property.location.toLowerCase().includes(locationQuery) : true;
     const matchesType = typeQuery ? property.propertyType.toLowerCase() === typeQuery : true;
     const matchesBHK = bhkQuery ? property.bhk.toLowerCase() === bhkQuery : true;
     const matchesMin = minBudget ? property.budget >= minBudget : true;
     const matchesMax = maxBudget ? property.budget <= maxBudget : true;
 
-    return matchesLocation && matchesType && matchesBHK && matchesMin && matchesMax;
+    return matchesQuery && matchesLocation && matchesType && matchesBHK && matchesMin && matchesMax;
   });
 
   return (

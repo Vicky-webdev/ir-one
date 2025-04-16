@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom'; 
 import Layout from './components/layouts/Layout.tsx';
 import { ToastProvider } from './context/ToastContext.tsx';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import App from './App.tsx';
  import './styles/base.css';
+
 
 import './index.css';
 

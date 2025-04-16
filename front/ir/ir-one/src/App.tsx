@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/index';
 import PropertiesPage from './pages/properties/index';
-import PropertyDetailsPage from './pages/properties/[id]';
+import PropertyDetailPage from './pages/properties/[id]';
 
 import DashboardPage from './pages/dashboard';
 import PlotsPage from './pages/buy/plots';
@@ -17,14 +17,16 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/properties" element={<PropertiesPage />} />
-      <Route path="/properties/:id" element={<PropertyDetailsPage />} />
+      
+      <Route path="/property/:id" element={<PropertyDetailPage />} /> 
+
  
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/buy/plots" element={<PlotsPage />} />
-<Route path="/buy/villas" element={<VillasPage />} />
-<Route path="/buy/independent-homes" element={<IndependentHomesPage />} />
-<Route path="/buy/flats" element={<FlatsPage />} />
-<Route path="/results" element={<ResultsPage />} />
+      <Route path="/buy/villas" element={<VillasPage />} />
+      <Route path="/buy/independent-homes" element={<IndependentHomesPage />} />
+      <Route path="/buy/flats" element={<FlatsPage />} />
+      <Route path="/results" element={<ResultsPage />} />
 
     </Routes>
   );

@@ -5,6 +5,7 @@ import HeroSection from '../components/ui/HeroSection';
 import SearchBar from '../components/SearchFilterBar';
 import FeaturesSection from '../components/home/FeaturesSection';
 import FeaturedListings from '../components/home/FeaturedListings';
+import PropertySlider from '../components/home/PropertySlider';
 
 import bannerImage from '../assets/images/1.jpg';
 import propertyData from '../data/mockProperties.json';
@@ -51,9 +52,9 @@ const HomePage = () => {
     navigate(`/results?${searchParams.toString()}`);
   };
 
-  const handleSubmitSearch = () => {
-    if (query) {
-      navigate(`/results?query=${encodeURIComponent(query)}`);
+  const handleSubmitSearch = (title: string) => {
+    if (title) {
+      navigate(`/results?query=${encodeURIComponent(title)}`);
     }
   };
 
@@ -80,25 +81,10 @@ const HomePage = () => {
       </div>
 
       {/* Listing preview grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-        {filtered.map((property) => (
-          <div
-            key={property.id}
-            className="border rounded-lg shadow hover:shadow-md transition p-4"
-          >
-            <img
-              src={property.image}
-              alt={property.title}
-              className="w-full h-48 object-cover rounded mb-2"
-            />
-            <h3 className="text-lg font-semibold">{property.title}</h3>
-            <p className="text-gray-600">{property.location} - {property.bhk}</p>
-            <p className="text-indigo-600 font-bold mt-1">
-              ₹ {property.budget.toLocaleString()}
-            </p>
-          </div>
-        ))}
-      </div>
+      <div className="py-16 px-4 md:px-10 lg:px-20 bg-gray-50 relative mt-6">
+          <PropertySlider listings={filtered} />
+        </div>
+
 
       <FeaturesSection />
       <FeaturedListings />

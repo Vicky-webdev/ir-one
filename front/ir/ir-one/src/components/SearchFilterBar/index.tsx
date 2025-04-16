@@ -1,67 +1,133 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { MapPin, Search } from 'lucide-react';
+import * as Slider from '@radix-ui/react-slider';
+import type { Property } from '../../types/types';
 
-const SearchBar = ({ onSearch }: { onSearch: (query: any) => void }) => {
+const formatBudget = (value: number) => {
+  if (value >= 100) return `₹${(value / 100).toFixed(1)}Cr`;
+  return `₹${value}L`;
+};
+
+interface SearchBarProps {
+  query: string;
+  onSearch: (filters: {
+    location: string;
+    propertyType: string;
+    bhk: string;
+    minBudget: string;
+    maxBudget: string;
+  }) => void;
+  onSubmit: (title: string) => void;
+  suggestions: Property[];
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({ query, onSubmit, onSearch, suggestions }) => {
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [bhk, setBhk] = useState('');
-  const [minBudget, setMinBudget] = useState('');
-  const [maxBudget, setMaxBudget] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [budgetRange, setBudgetRange] = useState<[number, number]>([0, 100]);
+  const [inputQuery, setInputQuery] = useState(query || '');
 
-  const handleLocationChange = (value: string) => {
-    setLocation(value);
+  const [locationSuggestions, setLocationSuggestions] = useState<Property[]>([]);
+  const [titleSuggestions, setTitleSuggestions] = useState<Property[]>([]);
 
-    // Fake suggestion logic (replace with real autosuggest later)
-    const allLocations = ['Chennai', 'Mumbai', 'Bangalore', 'Coimbatore', 'Delhi'];
-    const filtered = allLocations.filter(loc =>
-      loc.toLowerCase().includes(value.toLowerCase())
-    );
-    setSuggestions(filtered);
-  };
+  const locationRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    setInputQuery(query);
+  }, [query]);
+
+  useEffect(() => {
+    if (location.trim() === '') {
+      setLocationSuggestions([]);
+    } else {
+      const filtered = suggestions.filter((s) =>
+        s.location.toLowerCase().includes(location.toLowerCase())
+      );
+      setLocationSuggestions(filtered);
+    }
+  }, [location, suggestions]);
+
+  useEffect(() => {
+    if (inputQuery.trim() === '') {
+      setTitleSuggestions([]);
+    } else {
+      const filtered = suggestions.filter((s) =>
+        s.title.toLowerCase().includes(inputQuery.toLowerCase())
+      );
+      setTitleSuggestions(filtered);
+    }
+  }, [inputQuery, suggestions]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (locationRef.current && !locationRef.current.contains(e.target as Node)) {
+        setLocationSuggestions([]);
+      }
+      if (titleRef.current && !titleRef.current.contains(e.target as Node)) {
+        setTitleSuggestions([]);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleFilterSearch = () => {
     onSearch({
       location,
       propertyType,
       bhk,
-      minBudget,
-      maxBudget,
+      minBudget: String(budgetRange[0] * 100000),
+      maxBudget: String(budgetRange[1] * 100000),
+    });
+  };
+
+  const handleLocationSelect = (loc: string) => {
+    setLocation(loc);
+    setLocationSuggestions([]);
+    onSearch({
+      location: loc,
+      propertyType,
+      bhk,
+      minBudget: String(budgetRange[0] * 100000),
+      maxBudget: String(budgetRange[1] * 100000),
     });
   };
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div className="relative">
+    <div className="sticky top-4 z-20 bg-white/90 backdrop-blur shadow-md rounded-xl p-4 border">
+      <div className="flex flex-wrap gap-3 items-center justify-between">
+        {/* Location */}
+        <div className="relative w-full sm:w-1/4" ref={locationRef}>
+          <MapPin className="absolute left-3 top-3.5 text-gray-400 h-5 w-5" />
           <input
             type="text"
             placeholder="Location"
             value={location}
-            onChange={(e) => handleLocationChange(e.target.value)}
-            className="w-full border border-gray-300 rounded p-2"
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full pl-10 pr-2 py-2 border border-gray-300 rounded-md"
           />
-          {suggestions.length > 0 && (
-            <ul className="absolute bg-white border border-gray-300 w-full mt-1 z-10 rounded shadow-sm">
-              {suggestions.map((suggestion, index) => (
+          {locationSuggestions.length > 0 && (
+            <ul className="absolute z-10 bg-white border mt-1 rounded shadow w-full max-h-48 overflow-y-auto">
+              {[...new Set(locationSuggestions.map((s) => s.location))].map((loc, index) => (
                 <li
                   key={index}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    setLocation(suggestion);
-                    setSuggestions([]);
-                  }}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleLocationSelect(loc)}
                 >
-                  {suggestion}
+                  {loc}
                 </li>
               ))}
             </ul>
           )}
         </div>
 
+        {/* Property Type */}
         <select
           value={propertyType}
           onChange={(e) => setPropertyType(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
+          className="w-full sm:w-1/6 border rounded-md px-3 py-2"
         >
           <option value="">Property Type</option>
           <option value="Apartment">Apartment</option>
@@ -69,10 +135,11 @@ const SearchBar = ({ onSearch }: { onSearch: (query: any) => void }) => {
           <option value="Plot">Plot</option>
         </select>
 
+        {/* BHK */}
         <select
           value={bhk}
           onChange={(e) => setBhk(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
+          className="w-full sm:w-1/6 border rounded-md px-3 py-2"
         >
           <option value="">BHK</option>
           <option value="1 BHK">1 BHK</option>
@@ -81,29 +148,65 @@ const SearchBar = ({ onSearch }: { onSearch: (query: any) => void }) => {
           <option value="4+ BHK">4+ BHK</option>
         </select>
 
-        <input
-          type="number"
-          placeholder="Min Budget"
-          value={minBudget}
-          onChange={(e) => setMinBudget(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
-        />
+        {/* Budget */}
+        <div className="w-full sm:w-1/3">
+          <label className="block text-sm font-medium mb-1">Budget Range</label>
+          <Slider.Root
+            className="relative flex items-center select-none touch-none h-2 bg-gray-200 rounded-md mt-2"
+            value={budgetRange}
+            onValueChange={(value) => setBudgetRange(value as [number, number])}
+            min={0}
+            max={500}
+            step={5}
+          >
+            <Slider.Track className="bg-gray-300 relative grow rounded-md h-2">
+              <Slider.Range className="absolute bg-indigo-500 rounded-md h-full" />
+            </Slider.Track>
+            <Slider.Thumb className="block w-4 h-4 bg-indigo-600 rounded-full shadow-md cursor-pointer" />
+            <Slider.Thumb className="block w-4 h-4 bg-indigo-600 rounded-full shadow-md cursor-pointer" />
+          </Slider.Root>
+          <div className="flex justify-between text-sm mt-1 text-gray-700">
+            <span>{formatBudget(budgetRange[0])}</span>
+            <span>{formatBudget(budgetRange[1])}</span>
+          </div>
+        </div>
 
-        <input
-          type="number"
-          placeholder="Max Budget"
-          value={maxBudget}
-          onChange={(e) => setMaxBudget(e.target.value)}
-          className="w-full border border-gray-300 rounded p-2"
-        />
+        {/* Title Input */}
+        <div className="relative w-full sm:w-1/4" ref={titleRef}>
+          <input
+            type="text"
+            placeholder="Search by title..."
+            value={inputQuery}
+            onChange={(e) => setInputQuery(e.target.value)}
+            className="w-full border rounded-md px-3 py-2"
+          />
+          {titleSuggestions.length > 0 && (
+            <ul className="absolute z-10 bg-white border mt-1 rounded shadow w-full max-h-48 overflow-y-auto">
+              {titleSuggestions.map((s) => (
+                <li
+                  key={s.id}
+                  className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setInputQuery(s.title);
+                    onSubmit(s.title);
+                    setTitleSuggestions([]);
+                  }}
+                >
+                  {s.title}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <button
+          onClick={handleFilterSearch}
+          className="bg-indigo-600 text-white flex items-center gap-2 px-4 py-2 rounded-md hover:bg-indigo-700 transition w-full sm:w-auto"
+        >
+          <Search size={18} />
+          Search
+        </button>
       </div>
-
-      <button
-        onClick={handleSubmit}
-        className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
-      >
-        Search Properties
-      </button>
     </div>
   );
 };

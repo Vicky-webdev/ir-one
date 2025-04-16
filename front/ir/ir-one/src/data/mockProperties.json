@@ -1,22 +1,55 @@
 [
   {
     "id": 1,
-    "title": "2 BHK in Chennai",
-    "location": "Chennai",
-    "propertyType": "Apartment",
-    "bhk": "2 BHK",
-    "budget": 5000000,
-    "area": 900,
-    "image": "/images/property1.jpg"
+    "title": "Creative New Vision Township",
+    "location": "Guindy, Chennai",
+    "propertyType": "Land / Plot",
+    "bhk": "N/A",
+    "badge": "Hot",
+    "budget": 1200000,
+    "area": 800,
+    "image": "https://newprojects.99acres.com/projects/creative_township_developers/creative_new_vision_township/images/p3vp7t0_1733740582_536598175_med.jpg"
   },
   {
     "id": 2,
-    "title": "3 BHK Villa in Coimbatore",
-    "location": "Coimbatore",
+    "title": "Divyasree Hub 6",
+    "location": "Padappai, Chengalpattu",
     "propertyType": "Villa",
     "bhk": "3 BHK",
-    "budget": 7500000,
+    "badge": "New",
+    "budget": 12000000,
     "area": 1500,
-    "image": "/images/property2.jpg"
+    "image": "https://newprojects.99acres.com/projects/divyasree_/divyasree_hub_6/images/yj0i199_1739942778_570743809_med.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Omega Town",
+    "location": "Avadi, Chennai",
+    "propertyType": "Land / Plot",
+    "bhk": "N/A",
+    "badge": "Hot",
+    "budget": 1500000,
+    "area": 600,
+    "image": "https://newprojects.99acres.com/projects/vvr_southindia_properties_llp/vvr_omega_town_1/images/ktxrakc_1720605812_503705977_med.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Sunshine Valley",
+    "location": "Tambaram, Chennai",
+    "propertyType": "Land / Plot",
+    "bhk": "N/A",
+    "budget": 1000000,
+    "area": 550,
+    "image": "https://newprojects.99acres.com/projects/pacifica_companies/enchante_by_pacifica/images/po6rwf5n_med.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Green Nest Villas",
+    "location": "Kelambakkam",
+    "propertyType": "Villa",
+    "bhk": "4 BHK",
+    "budget": 9000000,
+    "area": 2000,
+    "image": "https://newprojects.99acres.com/projects/g_square_realtors/g_square_meadows/images/7oddl3h_1740117783_571372029_med.jpg"
   }
 ]
