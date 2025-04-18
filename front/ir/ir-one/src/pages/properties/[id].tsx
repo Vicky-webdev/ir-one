@@ -1,11 +1,15 @@
-// src/pages/properties/[id].tsx
-
-// Individual Property Page
-
-
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+
+import {
+  ImageBannerShimmer,
+  OverviewShimmer,
+  AmenitiesShimmer,
+  MapShimmer,
+  ContactAgentShimmer,
+} from "../../components/shimmer/DetailPageShimmers";
+import Button from "../../components/ui/Button";
 
 import { Property } from "../../components/ui/PropertyCard";
 import ImageBanner from "../../components/propertyDetail/ImageBanner";
@@ -13,44 +17,93 @@ import PropertyOverview from "../../components/propertyDetail/PropertyOverview";
 import Amenities from "../../components/propertyDetail/Amenities";
 import MapSection from "../../components/propertyDetail/MapSection";
 import ContactAgent from "../../components/propertyDetail/ContactAgent";
-import ShimmerLoader from "../../components/ui/PropertyCardSkeleton";
-
 
 const PropertyDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const [wishlisted, setWishlisted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await import("../../data/mockProperties.json");
       const found = data.default.find((item) => item.id === parseInt(id || "0"));
-      setProperty(found || null);
-      setLoading(false);
+      setTimeout(() => {
+        setProperty(found || null);
+        setLoading(false);
+      }, 1000);
     };
     fetchData();
   }, [id]);
 
   useEffect(() => {
+    if (property) {
+      const stored = localStorage.getItem("wishlist");
+      const wishlist: number[] = stored ? JSON.parse(stored) : [];
+      setWishlisted(wishlist.includes(property.id));
+    }
+  }, [property]);
+
+  const handleToggleWishlist = () => {
+    if (!property) return;
+    const stored = localStorage.getItem("wishlist");
+    let wishlist: number[] = stored ? JSON.parse(stored) : [];
+
+    if (wishlist.includes(property.id)) {
+      wishlist = wishlist.filter((id) => id !== property.id);
+    } else {
+      wishlist.push(property.id);
+    }
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    setWishlisted(!wishlisted);
+  };
+
+  useEffect(() => {
     document.title = "Property Details | Dream Homes";
   }, []);
 
-  if (loading) return <ShimmerLoader />;
-  if (!property) return <p className="text-center mt-6">Property not found</p>;
+  if (loading) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6 mt-6">
+        <ImageBannerShimmer />
+        <OverviewShimmer />
+        <AmenitiesShimmer />
+        <MapShimmer />
+        <ContactAgentShimmer />
+      </div>
+    );
+  }
+
+  if (!property) {
+    return <p className="text-center mt-6">Property not found</p>;
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow">
-      <div className="mb-4 text-sm text-blue-600 cursor-pointer hover:underline" onClick={() => navigate(-1)}>
-          ← Back to Listings
-        </div>
+      <div
+        className="mb-4 text-sm text-blue-600 cursor-pointer hover:underline"
+        onClick={() => navigate(-1)}
+      >
+        <Button variant="danger" iconRight={<ArrowLeft />}>
+          Back to Listings
+        </Button>
+      </div>
 
-        <ImageBanner image={property.image} />
+      <ImageBanner
+        image={property.image}
+        title={property.title}
+        location={property.location}
+        price={property.budget}
+        isWishlisted={wishlisted}
+        onToggleWishlist={handleToggleWishlist}
+      />
+
       <PropertyOverview {...property} />
       <Amenities />
       <MapSection />
       <ContactAgent />
-          </div>
+    </div>
   );
 };
 
